@@ -1,10 +1,8 @@
-use std::iter::Iterator;
+use std::io::{stdout, Write};
 
-fn main() {
-	let mut d = serde_cbor::Deserializer::from_reader(std::io::stdin())
-		.into_iter::<serde_cbor::Value>();
-
-	while let Some(Ok(v)) = d.next() {
-		println!("{}\n", serde_json::to_string_pretty(&v).unwrap());
-	}
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    if let Some(json) = cbortojson::cbor_reader_to_json_string(std::io::stdin()) {
+        stdout().write_all(json.as_bytes())?;
+    }
+    Ok(())
 }
